@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Handy Payment</title>
+</head>
+<body>
+    <h1>Create Order</h1>
+    <form id="order-form">
+        <label for="client">Client ID:</label>
+        <input type="number" id="client" name="client" required>
+        <br><br>
+        <label for="cart">Cart Invoice Number:</label>
+        <input type="number" id="cart" name="cart" required>
+        <br><br>
+        <label for="callback-url">Callback URL:</label>
+        <input type="url" id="callback-url" name="callback_url" required>
+        <br><br>
+        <label for="response-type">Response Type:</label>
+        <select id="response-type" name="response_type" required>
+            <option value="Json">Json</option>
+            <option value="HttpRedirect">HttpRedirect</option>
+        </select>
+        <br><br>
+        <button type="submit">Create Order</button>
+    </form>
+    <script>
+        document.getElementById('order-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const client_id = form.client.value;
+            const cart_invoice_number = form.cart.value;
+            const callback_url = form.callback_url.value;
+            const response_type = form.response_type.value;
+
+            const response = await fetch('/create-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    client_id,
+                    cart_invoice_number,
+                    callback_url,
+                    response_type
+                })
+            });
+
+            const result = await response.json();
+            alert(JSON.stringify(result));
+        });
+    </script>
+</body>
+</html>
